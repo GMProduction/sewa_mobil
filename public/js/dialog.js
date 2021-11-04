@@ -1,6 +1,6 @@
 function saveData(title, form, url, resposeSuccess) {
     var form_data = new FormData($('#' + form)[0]);
-
+    console.log(form_data)
     swal({
         title: title,
         text: "Apa kamu yakin ?",
@@ -23,9 +23,11 @@ function saveData(title, form, url, resposeSuccess) {
                     success: function (data, textStatus, xhr) {
                         console.log(data);
 
-                        if (xhr.status === 200) {
+                        if (xhr.status === 200 || xhr.status === 201) {
                             swal("Berhasil", {
                                 icon: "success",
+                                buttons: false,
+                                timer: 1000
                             }).then((dat) => {
                                 if (resposeSuccess) {
                                     resposeSuccess()
@@ -38,17 +40,46 @@ function saveData(title, form, url, resposeSuccess) {
                         }
                         console.log(data);
                     },
+                    xhr: function() {
+                        $('#'+form).append(' <div id="progressbar" class="progress mt-2">\n' +
+                            '                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>\n' +
+                            '                            </div>')
+                        var xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress", function(evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = (evt.loaded / evt.total) * 100;
+                                //Do something with upload progress here
+                                // console.log(percentComplete)
+                                $('#progressbar div').attr('style',"width:"+percentComplete+'%').html(parseInt(percentComplete)+'%')
+                                if (percentComplete === 100){
+                                    $('#progressbar div').addClass('bg-success')
+                                }
+                            }
+                        }, false);
+                        return xhr;
+                    },
+                    // uploadProgress: function(event, position, total, percentComplete){
+                    //     var percentVal = percentComplete + '%';
+                    //     console.log(percentVal);
+                    //     console.log(percentVal);
+                    //
+                    // },
                     complete: function (xhr, textStatus) {
                         console.log(xhr.status);
                         console.log(textStatus);
+                        $('#progressbar').remove();
+
                     },
                     error: function (error, xhr, textStatus) {
                         // console.log("LOG ERROR", error.responseJSON.errors);
                         // console.log("LOG ERROR", error.responseJSON.errors[Object.keys(error.responseJSON.errors)[0]][0]);
+                        $('#progressbar div').removeClass('bg-success').addClass('bg-danger');
                         console.log(xhr.status);
                         console.log(textStatus);
                         console.log(error.responseJSON);
-                        swal(error.responseJSON.errors[Object.keys(error.responseJSON.errors)[0]][0])
+                        console.log(error.responseJSON.errors);
+                        // swal(error.responseJSON['message'] ? error.responseJSON['message'] : error.responseJSON.errors ? error.responseJSON.errors[Object.keys(error.responseJSON.errors)[0]][0] : error.responseJSON['msg'] )
+                        swal(error.responseJSON.errors ? error.responseJSON.errors[Object.keys(error.responseJSON.errors)[0]][0] : error.responseJSON['message'])
                     }
                 })
             }

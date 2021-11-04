@@ -21,61 +21,60 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5>Data User</h5>
                 <button type="button ms-auto" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#tambahsiswa">Tambah Data</button>
+                        data-bs-target="#tambahsiswa">Tambah Data
+                </button>
             </div>
 
 
             <table class="table table-striped table-bordered ">
                 <thead>
-                    <th>
-                        #
-                    </th>
-                    <th>
-                        Nama
-                    </th>
-                    <th>
-                        Alamat
-                    </th>
-                    <th>
-                        No. KTP
-                    </th>
-
-                    <th>
-                        Foto Ktp
-                    </th>
-
-                    <th>
-                        Action
-                    </th>
-
+                <tr>
+                    <th>#</th>
+                    <th>Avatar</th>
+                    <th>Nama</th>
+                    <th>Alamat</th>
+                    <th>No. HP</th>
+                    <th>Foto Ktp</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
                 </thead>
 
-                <tr>
-                    <td>
-                        1
-                    </td>
-                    <td>
-                        Joko
-                    </td>
-                    <td>
-                        Jl. jl men
-                    </td>
-                    <td>
-                        081257182
-                    </td>
-                    <td>
-                        <img src="https://cdn-2.tstatic.net/palembang/foto/berita/2011/11/10/AVRIL.JPG"
-                            style="width: 75px; height: 100px; object-fit: cover" />
-                    </td>
-                    <td style="width: 150px">
-                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#tambahsiswa">Ubah</button>
-                        <button type="button" class="btn btn-danger btn-sm" onclick="hapus('id', 'nama') ">hapus</button>
-                    </td>
-                </tr>
+                @forelse($data as $key => $d)
+                    <tr>
+                        <td width="10">{{$data->firstItem() + $key}}</td>
+                        <td width="100">
+                            <img src="{{$d->pelanggan->avatar}}" onerror="this.src='{{asset('/images/nouser.png')}}'; this.error=null"
+                                 style=" height: 100px; object-fit: cover"/>
+                        </td>
+                        <td>{{$d->nama}}</td>
+                        <td>{{$d->pelanggan->alamat}}</td>
+                        <td>{{$d->pelanggan->no_hp}}</td>
+                        <td width="100">
+                            <img src="{{$d->pelanggan->foto_ktp}}" onerror="this.src='{{asset('/images/noimage.png')}}'; this.error=null"
+                                 style=" height: 100px; object-fit: cover"/>
+                        </td>
+                        <td width="100"><span class="badge {{$d->pelanggan->isActive === 0 ? 'bg-danger' : 'bg-success'}}">{{$d->pelanggan->isActive === 0 ? 'Tidak Aktif' : 'Aktif'}}</span></td>
+                        <td style="width: 150px">
+                            <button type="button" class="btn btn-success btn-sm" data-active="{{$d->pelanggan->isActive}}" data-username="{{$d->username}}"
+                                    data-avatar="{{$d->pelanggan->avatar ?? '/images/nouser.png'}}"
+                                    data-foto="{{$d->pelanggan->foto_ktp ?? '/images/noimage.png'}}" data-ktp="{{$d->pelanggan->no_ktp}}" data-hp="{{$d->pelanggan->no_hp}}"
+                                    data-alamat="{{$d->pelanggan->alamat}}"
+                                    data-nama="{{$d->nama}}" data-id="{{$d->id}}" id="detailData">Detail
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="hapus('id', 'nama') ">hapus</button>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center">Tidak ada data user</td>
+                    </tr>
+                @endforelse
 
             </table>
-
+            <div class="d-flex justify-content-end">
+                {{$data->links()}}
+            </div>
         </div>
 
 
@@ -83,97 +82,112 @@
 
 
             <!-- Modal Tambah-->
-            <div class="modal fade" id="tambahsiswa" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
+            <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tambah Siswa</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Detaim Member</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                                    aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form>
-
-                                <div class="mb-3">
-                                    <label for="nama" class="form-label">Nama</label>
-                                    <input type="text" required class="form-control" id="nama">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="alamat">Alamat</label>
-                                    <textarea class="form-control" id="alamat" rows="3"></textarea>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="nphp" class="form-label">no. Hp</label>
-                                    <input type="number" required class="form-control" id="nphp">
-                                </div>
-
-                                <div class="mt-3 mb-2">
-                                    <label for="foto" class="form-label">Foto</label>
-                                    <input class="form-control" type="file" id="foto">
-                                </div>
-
-                                <hr>
-
-                                <div class="mb-3">
-                                    <label for="username" class="form-label">Username</label>
-                                    <input type="text" required class="form-control" id="username">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Password</label>
-                                    <input type="password" required class="form-control" id="password">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="password-confirmation" class="form-label">Konfirmasi Password</label>
-                                    <input type="password" required class="form-control" id="password-confirmation">
-                                </div>
-                                
-                                {{-- <div class="mb-3">
-                                    <label for="kategori" class="form-label">Kategori</label>
-                                    <div class="d-flex">
-                                        <select class="form-select" aria-label="Default select example" name="idguru">
-                                            <option selected>Mata Pelajaran</option>
-                                            <option value="1">Erfin</option>
-                                            <option value="2">Joko A</option>
-                                            <option value="3">Joko B</option>
-                                        </select>
-                                        <a class="btn btn-primary">+</a>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-group mb-3">
+                                        <div id="" class="d-flex justify-content-center"><img src="" id="imgAvatar" style="height: 100px" alt="">
+                                        </div>
                                     </div>
-                                </div> --}}
+                                    <div class="form-group mb-3">
+                                        <label class="" for="exampleInputPassword1">Username</label>
+                                        <input class="form-control" id="username" disabled>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label class="" for="exampleInputPassword1">Nama</label>
+                                        <input class="form-control" id="nama" disabled>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label class="" for="exampleInputPassword1">No. Hp</label>
+                                        <input class="form-control" id="hp" disabled>
+                                    </div>
 
-                                <div class="mb-4"></div>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-group mb-3">
+                                        <div id="" class="d-flex justify-content-center"><img src="" id="imgKtp" style="height: 100px" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label class="" for="exampleInputPassword1">No. KTP</label>
+                                        <input class="form-control" id="ktp" disabled>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label class="" for="exampleInputPassword1">Alamat</label>
+                                        <input class="form-control" id="alamat" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <form id="form" onsubmit="return save()">
+                                <input type="hidden" name="id" id="id">
+                                @csrf
+                                <input type="hidden" name="isActive" id="isActive">
+                                <button type="submit" id="btnActiv" class="btn btn-success"></button>
                             </form>
                         </div>
-
                     </div>
                 </div>
+
             </div>
-
         </div>
-
     </section>
 
 @endsection
 
 @section('script')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
         })
 
+        $(document).on('click', '#detailData', function () {
+            $('#modal #id').val($(this).data('id'))
+            var isActive = $(this).data('active') === 0 ? 1 : 0;
+            var btnAktif = $('#btnActiv');
+            btnAktif.html('Aktifkan Member').removeClass('btn-danger').addClass('btn-success')
+            if(isActive === 0){
+                btnAktif.html('Non Aktifkan Member').addClass('btn-danger').removeClass('btn-success')
+
+            }
+            $('#modal #isActive').val(isActive)
+            $('#modal #nama').val($(this).data('nama'))
+            $('#modal #username').val($(this).data('username'))
+            $('#modal #ktp').val($(this).data('ktp'))
+            $('#modal #hp').val($(this).data('hp'))
+            $('#modal #alamat').val($(this).data('alamat'))
+            $('#modal #imgAvatar').attr('src', $(this).data('avatar'))
+            $('#modal #imgKTP').attr('src', $(this).data('foto'))
+            $('#modal').modal('show')
+        })
+
+        function save() {
+            var title = 'Aktifkan Member';
+            if ($('#form #isActive').val() === '0'){
+                title = 'Non Aktifkan Member';
+            }
+            saveData(title,'form')
+            return false;
+        }
+
         function hapus(id, name) {
             swal({
-                    title: "Menghapus data?",
-                    text: "Apa kamu yakin, ingin menghapus data ?!",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
+                title: "Menghapus data?",
+                text: "Apa kamu yakin, ingin menghapus data ?!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
                 .then((willDelete) => {
                     if (willDelete) {
                         swal("Berhasil Menghapus data!", {

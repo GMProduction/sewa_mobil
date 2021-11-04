@@ -45,34 +45,34 @@
 
 
 
-            <a href="/admin/user">
+            <a href="/user">
                 <li href="#" class="nav-link t-white">
                     <i class='bx bx-user'></i>
                     <span class="mx-2">Master User</span>
                 </li>
             </a>
 
-            <a href="/admin/mobil" >
+            <a href="/mobil" >
                 <li href="#" class="nav-link t-white">
                     <i class='bx bxs-car' ></i>
                     <span class="mx-2">Master Mobil</span>
                 </li>
             </a>
-            <a href="/admin/transaksi" >
+            <a href="/transaksi" >
                 <li href="#" class="nav-link t-white">
                     <i class='bx bx-transfer' ></i>
                     <span class="mx-2">Transaksi</span>
                 </li>
             </a>
 
-            <a href="/admin/laporantransaksi" >
+            <a href="/laporantransaksi" >
                 <li href="#" class="nav-link t-white">
                     <i class='bx bxs-report' ></i>
                     <span class="mx-2">Laporan Transaksi</span>
                 </li>
             </a>
 
-            <a href="/admin/laporanpemasukan" >
+            <a href="/laporanpemasukan" >
                 <li href="#" class="nav-link t-white">
                     <i class='bx bx-money' ></i>
                     <span class="mx-2">Laporan Pemasukan</span>
