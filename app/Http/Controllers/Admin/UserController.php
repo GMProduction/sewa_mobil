@@ -17,7 +17,7 @@ class UserController extends Controller
         if (\request()->isMethod('POST')){
             return  $this->store();
         }
-        $user = User::with('pelanggan')->paginate(10);
+        $user = User::with('pelanggan')->where('roles','=','pelanggan')->paginate(10);
         return view('admin.user')->with(['data' => $user]);
     }
 

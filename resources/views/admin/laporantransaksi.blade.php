@@ -21,31 +21,34 @@
                 <h5 class="mb-3">Laporan</h5>
                 <form id="formTanggal">
                     <div class="d-flex align-items-end">
-                        <div >
-                            <label for="kategori" class="form-label">Status Sewa</label>
-                            <div class="d-flex">
-                                <select class="form-select" aria-label="Default select example" name="idguru">
-                                    <option selected>Semua</option>
-                                    <option value="1">Menunggu Konfirmasi</option>
-                                    <option value="1">Menunggu Jadwal</option>
-                                    <option value="2">Di Pakai</option>
-                                    <option value="3">Di Kembalikan</option>
-                                </select>
+                        <form>
+                            <div>
+                                <label for="kategori" class="form-label">Status Sewa</label>
+                                <div class="d-flex">
+                                    <select class="form-select me-2" aria-label="Default select example" id="selectStatus" name="status">
+                                        <option selected value="">Semua</option>
+                                        <option value="11">Menunggu Konfirmasi</option>
+                                        <option value="1">Menunggu Diambil</option>
+                                        <option value="2">Dipinjam</option>
+                                        <option value="3">Selesai</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="me-2 ms-2">
-                            <label for="kategori" class="form-label">Periode</label>
-                            <div class="input-group input-daterange">
-                                <input type="text" class="form-control me-2" name="start" style="background-color: white; line-height: 2.0;"
-                                    readonly value="{{ request('start') }}" required>
-                                <div class="input-group-addon">to</div>
-                                <input type="text" class="form-control ms-2" name="end" style="background-color: white; line-height: 2.0;"
-                                    readonly value="{{ request('end') }}" required>
+                            <div class="me-2 ms-2">
+                                <label for="kategori" class="form-label">Periode</label>
+                                <div class="input-group input-daterange">
+                                    <input type="text" class="form-control me-2" name="start" style="background-color: white; line-height: 2.0;"
+                                           readonly value="{{ request('start') }}" required>
+                                    <div class="input-group-addon">to</div>
+                                    <input type="text" class="form-control ms-2" name="end" style="background-color: white; line-height: 2.0;"
+                                           readonly value="{{ request('end') }}" required>
+                                </div>
                             </div>
-                        </div>
-                        <button type="submit" class="btn btn-success mx-2">Cari</button>
-                        <a class="btn btn-warning" id="cetak" target="_blank" href="/cetaklaporanpendapatan/{id}">Cetak</a>
+                            <button type="submit" class="btn btn-success mx-2">Cari</button>
+                            <a class="btn btn-warning" id="cetak" target="_blank" href="#!">Cetak</a>
+                        </form>
+
                     </div>
                 </form>
 
@@ -53,69 +56,35 @@
 
             <table class="table table-striped table-bordered ">
                 <thead>
-                    <th>
-                        #
-                    </th>
-
-                    <th>
-                        Nama Pelanggan
-                    </th>
-
-                    <th>
-                        Mobil
-                    </th>
-
-                    <th>
-                        Tanggal
-                    </th>
-
-                    <th>
-                        Durasi
-                    </th>
-
-                    <th>
-                        Status Sewa
-                    </th>
-
-                    <th>
-                        Status Pembayaran
-                    </th>
-
-
-
-                </thead>
-
                 <tr>
-                    <td>
-                        1
-                    </td>
-
-                    <td>
-                        Ayu
-                    </td>
-                    <td>
-                        Mazda hijau
-                    </td>
-
-                    <td>
-                        12 September 2019
-                    </td>
-                    <td>
-                        12 Jam
-                    </td>
-
-                    <td>
-                        Menunggu Konfirmasi
-                    </td>
-
-                    <td>
-                        Menunggu Pembayaran
-                    </td>
-
-
+                    <th>#</th>
+                    <th>Nama Pelanggan</th>
+                    <th>Mobil</th>
+                    <th>Tanggal</th>
+                    <th>Durasi</th>
+                    <th>Status Sewa</th>
+                    <th>Status Pembayaran</th>
                 </tr>
-
+                </thead>
+                @forelse($data as $key => $d)
+                    <tr>
+                        <td>{{$data->firstItem() + $key}}</td>
+                        <td>{{$d->user->nama}}</td>
+                        <td>{{$d->harga->mobil->nama}}</td>
+                        <td>{{date('d F Y H:i:s', strtotime($d->tanggal_pinjam))}}</td>
+                        <td>{{$d->harga->duration}} Jam</td>
+                        <td>{{$d->status == 0 ? 'Menunggu Konfirmasi' : ($d->status == 1 ? 'Menunggu Pengambilan' : ($d->status == 2 ? 'Dipinjam' : 'Selesai'))}}</td>
+                        <td>{{$d->status_pembayaran == 0 ? 'Menunggu' : ($d->status_pembayaran == 1 ? 'Ditolak' : 'Diterima')}}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="8" class="text-center">Tidak ada data</td>
+                    </tr>
+                @endforelse
             </table>
+            <div class="d-flex justify-content-end">
+                {{$data->links()}}
+            </div>
 
         </div>
 
@@ -125,13 +94,15 @@
 
 @section('script')
     <script>
-        $('.input-daterange input').each(function() {
+        $('.input-daterange input').each(function () {
             $(this).datepicker({
                 format: "dd-mm-yyyy"
             });
         });
-        $(document).on('click', '#cetak', function() {
-            $(this).attr('href', '/admin/cetaklaporantransaksi?' + $('#formTanggal').serialize());
+
+        $(document).on('click', '#cetak', function () {
+            // console.log(window.location.pathname+'/cetak'+window.location.search )
+            $(this).attr('href', window.location.pathname+'/cetak'+window.location.search);
         })
     </script>
 

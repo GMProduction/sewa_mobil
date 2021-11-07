@@ -19,14 +19,12 @@ class CreateTransaksisTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->bigInteger('harga_id')->unsigned()->nullable(true);
             $table->foreign('harga_id')->references('id')->on('master_hargas');
-            $table->integer('durasi');
-            $table->integer('harga');
             $table->integer('total');
             $table->dateTime('tanggal_pinjam');
             $table->dateTime('tanggal_kembali')->default(null)->nullable(true);
             $table->tinyInteger('status');
             $table->tinyInteger('status_pembayaran');
-            $table->text('image');
+            $table->text('image')->default(null)->nullable(true);
             $table->timestamps();
         });
     }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
@@ -80,5 +82,39 @@ class AuthController extends Controller
                 ]
             );
         }
+    }
+
+    public function isAuth($credentials = [])
+    {
+        if (count($credentials) > 0 && Auth::attempt($credentials)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function loginWeb(){
+        $credentials = [
+            'username' => \request('username'),
+            'password' => \request('password'),
+        ];
+        if ($this->isAuth($credentials)) {
+            $redirect = '/login';
+            if (Auth::user()->roles === 'admin'){
+                return redirect('/');
+            }
+            return Redirect::back()->withErrors(['failed', 'Maaf anda bukan admin']);
+        }
+
+        return Redirect::back()->withErrors(['failed', 'Periksa Kembali Username dan Password Anda']);
+    }
+
+    /**
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function logout(){
+        Auth::logout();
+
+        return redirect('/login');
     }
 }

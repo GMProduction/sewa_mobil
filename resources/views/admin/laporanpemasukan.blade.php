@@ -25,10 +25,10 @@
                         <div class="me-2">
                             <div class="input-group input-daterange">
                                 <input type="text" class="form-control me-2" name="start" style="background-color: white"
-                                    readonly value="{{ request('start') }}" required>
+                                       readonly value="{{ request('start') }}" required>
                                 <div class="input-group-addon">to</div>
                                 <input type="text" class="form-control ms-2" name="end" style="background-color: white"
-                                    readonly value="{{ request('end') }}" required>
+                                       readonly value="{{ request('end') }}" required>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success mx-2">Cari</button>
@@ -40,78 +40,47 @@
 
             <table class="table table-striped table-bordered ">
                 <thead>
-                    <th>
-                        #
-                    </th>
-
-                    <th>
-                        Nama Pelanggan
-                    </th>
-
-                    <th>
-                        Mobil
-                    </th>
-
-                    <th>
-                        Tanggal
-                    </th>
-
-                    <th>
-                        Durasi
-                    </th>
-
-                    <th>
-                        Harga
-                    </th>
-
-
-
-                </thead>
-
                 <tr>
-                    <td>
-                        1
-                    </td>
-
-                    <td>
-                        Ayu
-                    </td>
-                    <td>
-                        Mazda hijau
-                    </td>
-
-                    <td>
-                        12 September 2019
-                    </td>
-                    <td>
-                        12 Jam
-                    </td>
-
-                    <td>
-                        Rp 200.000
-                    </td>
-
-
-
+                    <th>#</th>
+                    <th>Nama Pelanggan</th>
+                    <th>Mobil</th>
+                    <th>Tanggal</th>
+                    <th>Durasi</th>
+                    <th>Harga</th>
                 </tr>
-
+                </thead>
+                @forelse($data as $key => $d)
+                    <tr>
+                        <td>{{$data->firstItem() + $key}}</td>
+                        <td>{{$d->user->nama}}</td>
+                        <td>{{$d->harga->mobil->nama}}</td>
+                        <td>{{date('d F Y H:i:s', strtotime($d->tanggal_pinjam))}}</td>
+                        <td>{{$d->harga->duration}} Jam</td>
+                        <td>{{number_format($d->harga->harga)}}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center">Tidak ada data</td>
+                    </tr>
+                @endforelse
             </table>
-
+            <div class="d-flex justify-content-end">
+                {{$data->links()}}
+            </div>
         </div>
-
     </section>
 
 @endsection
 
 @section('script')
     <script>
-        $('.input-daterange input').each(function() {
+        $('.input-daterange input').each(function () {
             $(this).datepicker({
                 format: "dd-mm-yyyy"
             });
         });
-        $(document).on('click', '#cetak', function() {
-            $(this).attr('href', '/admin/cetaklaporanpendapatan?' + $('#formTanggal').serialize());
+        $(document).on('click', '#cetak', function () {
+            $(this).attr('href', window.location.pathname+'/cetak'+window.location.search);
         })
     </script>
 

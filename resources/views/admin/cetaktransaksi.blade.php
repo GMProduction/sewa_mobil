@@ -115,7 +115,7 @@
         {{-- <img src="{{ public_path('static-image/logo.png') }}" style="width: 120px; float: left;" /> --}}
 
         <div>
-            <h4 style=" text-align: right;margin-bottom:0;margin-top:0">Laporan Pemasukan</h4>
+            <h4 style=" text-align: right;margin-bottom:0;margin-top:0">Laporan Transaksi</h4>
             <h5 style=" text-align: right;margin-bottom:0;margin-top:0">Periode</h5>
             @if ($start)
                 <h5 style=" text-align: right;margin-bottom:0;margin-top:0">{{ date('d F Y', strtotime($start)) }} -
@@ -129,47 +129,32 @@
 
         <table>
             <thead>
-                <tr>
-                    <th style="width: 10px" class="text-center">#</th>
-                    <th class="text-center">Nama Pelanggan</th>
-                    <th class="text-center">Mobil</th>
-                    <th style="width: 400px" class="text-center">Tanggal</th>
-                    <th class="text-center">Status Sewa</th>
-                    <th class="text-center">Status Pembayaran</th>
-                </tr>
+            <tr>
+                <th>#</th>
+                <th>Nama Pelanggan</th>
+                <th>Mobil</th>
+                <th>Tanggal</th>
+                <th>Durasi</th>
+                <th>Status Sewa</th>
+                <th>Status Pembayaran</th>
+            </tr>
             </thead>
             <tbody>
-                {{-- @forelse($data as $key => $d)
-                    <tr>
-                        <td>{{ $key + 1 }}</td>
-                        <td>{{ $d->getPelanggan->nama }}</td>
-                        <td>{{ date('d F Y', strtotime($d->tanggal_pesanan)) }}</td>
-                        <td>
-                            <table style="border: none !important">
-                                @foreach ($d->getKeranjang as $num => $k)
-                                    <tr style="border: none">
-                                        <td rowspan="2" class="py-0">{{ $num + 1 }}</td>
-                                        <td colspan="5" class="py-0 border-bottom-0">{{ $k->getProduk->nama_produk }}
-                                        </td>
-                                    </tr>
-                                    <tr style="border-left: none; border-right: none">
-                                        <td class="py-0">{{ number_format($k->getProduk->harga, 0) }}</td>
-                                        <td class="py-0">x</td>
-                                        <td class="py-0">{{ $k->qty }}</td>
-                                        <td class="py-0">=</td>
-                                        <td class="py-0">{{ number_format($k->total_harga, 0) }}</td>
-                                    </tr>
-                                @endforeach
-                            </table>
-                        </td>
-                        <td>Rp. {{ number_format($d->biaya_pengiriman, 0) }}</td>
-                        <td>Rp. {{ number_format($d->total_harga, 0) }}</td>
-                    </tr>
-                @empty --}}
-                {{-- <tr>
-                        <td class="text-center" colspan="6">Tidak ada pesanan</td>
-                    </tr> --}}
-                {{-- @endforelse --}}
+            @forelse($data as $key => $d)
+                <tr>
+                    <td>{{1 + $key}}</td>
+                    <td>{{$d->user->nama}}</td>
+                    <td>{{$d->harga->mobil->nama}}</td>
+                    <td>{{date('d F Y H:i:s', strtotime($d->tanggal_pinjam))}}</td>
+                    <td>{{$d->harga->duration}} Jam</td>
+                    <td>{{$d->status == 0 ? 'Menunggu Konfirmasi' : ($d->status == 1 ? 'Menunggu Pengambilan' : ($d->status == 2 ? 'Dipinjam' : 'Selesai'))}}</td>
+                    <td>{{$d->status_pembayaran == 0 ? 'Menunggu' : ($d->status_pembayaran == 1 ? 'Ditolak' : 'Diterima')}}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="8" class="text-center">Tidak ada data</td>
+                </tr>
+            @endforelse
             </tbody>
         </table>
 
@@ -181,9 +166,7 @@
 
         <div style="left:10px;width: 300px; margin-left : 100px;display: inline-block">
             <p class="text-center mb-5">Admin</p>
-            <p class="text-center">(
-                {{-- {{ auth()->user()->username }} --}}
-                )</p>
+            <p class="text-center">( ........................... )</p>
         </div>
 
 

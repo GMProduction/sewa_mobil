@@ -20,9 +20,9 @@
 
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5>Data User</h5>
-                <button type="button ms-auto" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                        data-bs-target="#tambahsiswa">Tambah Data
-                </button>
+{{--                <button type="button ms-auto" class="btn btn-primary btn-sm" data-bs-toggle="modal"--}}
+{{--                        data-bs-target="#tambahsiswa">Tambah Data--}}
+{{--                </button>--}}
             </div>
 
 

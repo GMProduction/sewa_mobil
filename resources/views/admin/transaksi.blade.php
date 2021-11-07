@@ -22,15 +22,19 @@
                 <h5>Data Perkembangan</h5>
                 <div class="mb-3">
                     <label for="kategori" class="form-label">Status Sewa</label>
-                    <div class="d-flex">
-                        <select class="form-select" aria-label="Default select example" name="idguru">
-                            <option selected>Semua</option>
-                            <option value="1">Menunggu Konfirmasi</option>
-                            <option value="1">Menunggu Jadwal</option>
-                            <option value="2">Di Pakai</option>
-                            <option value="3">Di Kembalikan</option>
-                        </select>
-                    </div>
+                    <form>
+                        <div class="d-flex">
+                            <select class="form-select me-2" aria-label="Default select example" id="selectStatus" name="status">
+                                <option selected value="">Semua</option>
+                                <option value="11">Menunggu Konfirmasi</option>
+                                <option value="1">Menunggu Diambil</option>
+                                <option value="2">Dipinjam</option>
+                                <option value="3">Selesai</option>
+                            </select>
+                            <button type="submit" class="btn btn-success">Cari</button>
+                        </div>
+                    </form>
+
                 </div>
 
             </div>
@@ -38,75 +42,39 @@
 
             <table class="table table-striped table-bordered ">
                 <thead>
-                    <th>
-                        #
-                    </th>
-
-                    <th>
-                        Nama Pelanggan
-                    </th>
-
-                    <th>
-                        Mobil
-                    </th>
-
-                    <th>
-                        Tanggal
-                    </th>
-
-                    <th>
-                        Durasi
-                    </th>
-
-                    <th>
-                        Status Sewa
-                    </th>
-
-                    <th>
-                        Status Pembayaran
-                    </th>
-
-                    <th>
-                        Action
-                    </th>
-
-                </thead>
-
                 <tr>
-                    <td>
-                        1
-                    </td>
-
-                    <td>
-                        Ayu
-                    </td>
-                    <td>
-                        Mazda hijau
-                    </td>
-
-                    <td>
-                        12 September 2019
-                    </td>
-                    <td>
-                        12 Jam
-                    </td>
-
-                    <td>
-                        Menunggu Konfirmasi
-                    </td>
-
-                    <td>
-                        Menunggu Pembayaran
-                    </td>
-
-                    <td style="width: 150px">
-                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#detail">Detail</button>
-                    </td>
+                    <th>#</th>
+                    <th>Nama Pelanggan</th>
+                    <th>Mobil</th>
+                    <th>Tanggal</th>
+                    <th>Durasi</th>
+                    <th>Status Sewa</th>
+                    <th>Status Pembayaran</th>
+                    <th>Action</th>
                 </tr>
-
+                </thead>
+                @forelse($data as $key => $d)
+                    <tr>
+                        <td>{{$data->firstItem() + $key}}</td>
+                        <td>{{$d->user->nama}}</td>
+                        <td>{{$d->harga->mobil->nama}}</td>
+                        <td>{{date('d F Y H:i:s', strtotime($d->tanggal_pinjam))}}</td>
+                        <td>{{$d->harga->duration}} Jam</td>
+                        <td>{{$d->status == 0 ? 'Menunggu Konfirmasi' : ($d->status == 1 ? 'Menunggu Pengambilan' : ($d->status == 2 ? 'Dipinjam' : 'Selesai'))}}</td>
+                        <td>{{$d->status_pembayaran == 0 ? 'Menunggu' : ($d->status_pembayaran == 1 ? 'Ditolak' : 'Diterima')}}</td>
+                        <td style="width: 150px">
+                            <button type="button" class="btn btn-success btn-sm" id="detailData" data-id="{{$d->id}}">Detail</button>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="8" class="text-center">Tidak ada data</td>
+                    </tr>
+                @endforelse
             </table>
-
+            <div class="d-flex justify-content-end">
+                {{$data->links()}}
+            </div>
         </div>
 
 
@@ -119,7 +87,7 @@
                         <div class="modal-header">
                             <h5 class="modal-title" id="detail1">Detail Transaksi</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                                    aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
 
@@ -127,82 +95,42 @@
                                 <div class="col-6">
                                     <table>
                                         <tr>
-                                            <th>
-                                                Nama Pelanggan
-                                            </th>
-                                            <td>
-                                                <span class="ms-1"> :</span>
-                                            </td>
-                                            <td>
-                                                <span class="ms-3">Ayu</span>
-                                            </td>
+                                            <th>Nama Pelanggan</th>
+                                            <td><span class="ms-1"> :</span></td>
+                                            <td><span class="ms-3 field" id="dName">Ayu</span></td>
                                         </tr>
                                         <tr class="mb-3">
-                                            <th>
-                                                No. Hp
-                                            </th>
-                                            <td>
-                                                <span class="ms-1"> :</span>
-                                            </td>
-                                            <td>
-                                                <span class="ms-3">087987984</span>
-                                            </td>
+                                            <th>No. Hp</th>
+                                            <td><span class="ms-1"> :</span></td>
+                                            <td><span class="ms-3 field" id="dhp">087987984</span></td>
                                         </tr>
 
                                         <tr class="mb-3">
-                                            <th>
-                                                Alamat
-                                            </th>
-                                            <td>
-                                                <span class="ms-1"> :</span>
-                                            </td>
-                                            <td>
-                                                <span class="ms-3">Jl. jl men</span>
-                                            </td>
+                                            <th>Alamat</th>
+                                            <td><span class="ms-1"> :</span></td>
+                                            <td><span class="ms-3 field" id="dAlamat">Jl. jl men</span></td>
                                         </tr>
-
                                     </table>
                                 </div>
 
                                 <div class="col-6">
                                     <table>
                                         <tr>
-                                            <th>
-                                                Nama Mobil
-                                            </th>
-                                            <td>
-                                                <span class="ms-1"> :</span>
-                                            </td>
-                                            <td>
-                                                <span class="ms-3">Mazda Hijau</span>
-                                            </td>
+                                            <th>Nama Mobil</th>
+                                            <td><span class="ms-1"> :</span></td>
+                                            <td><span class="ms-3 field" id="dMobil">Mazda Hijau</span></td>
                                         </tr>
-
                                         <tr>
-                                            <th>
-                                                Tahun
-                                            </th>
-                                            <td>
-                                                <span class="ms-1"> :</span>
-                                            </td>
-                                            <td>
-                                                <span class="ms-3">2021</span>
-                                            </td>
+                                            <th>Tahun</th>
+                                            <td><span class="ms-1"> :</span></td>
+                                            <td><span class="ms-3 field" id="dTahun">2021</span></td>
                                         </tr>
-
                                         <tr>
-                                            <th>
-                                                Keterangan
-                                            </th>
-                                            <td>
-                                                <span class="ms-1"> :</span>
-                                            </td>
-                                            <td>
-                                                <span class="ms-3">Mobil sedan warna hijau </span>
-                                            </td>
+                                            <th>Keterangan</th>
+                                            <td><span class="ms-1"> :</span></td>
+                                            <td><span class="ms-3 field" id="dKeterangan">Mobil sedan warna hijau </span></td>
                                         </tr>
                                     </table>
-
                                 </div>
 
                             </div>
@@ -213,38 +141,20 @@
                                 <div class="col-6">
                                     <table>
                                         <tr>
-                                            <th>
-                                                Tanggal Sewa
-                                            </th>
-                                            <td>
-                                                <span class="ms-1"> :</span>
-                                            </td>
-                                            <td>
-                                                <span class="ms-3">12 September 2021</span>
-                                            </td>
+                                            <th>Tanggal Sewa</th>
+                                            <td><span class="ms-1"> :</span></td>
+                                            <td><span class="ms-3 field" id="dTanggal">12 September 2021</span></td>
                                         </tr>
                                         <tr class="mb-3">
-                                            <th>
-                                                Durasi
-                                            </th>
-                                            <td>
-                                                <span class="ms-1"> :</span>
-                                            </td>
-                                            <td>
-                                                <span class="ms-3">12 Jam</span>
-                                            </td>
+                                            <th>Durasi</th>
+                                            <td><span class="ms-1"> :</span></td>
+                                            <td><span class="ms-3 field" id="dDurasi">12 Jam</span></td>
                                         </tr>
 
                                         <tr class="mb-3">
-                                            <th>
-                                                Biaya
-                                            </th>
-                                            <td>
-                                                <span class="ms-1"> :</span>
-                                            </td>
-                                            <td>
-                                                <span class="ms-3">Rp 200.000</span>
-                                            </td>
+                                            <th>Biaya</th>
+                                            <td><span class="ms-1"> :</span></td>
+                                            <td><span class="ms-3 field" id="dBiaya">Rp 200.000</span></td>
                                         </tr>
 
                                     </table>
@@ -253,59 +163,36 @@
                                 <div class="col-6">
                                     <table>
                                         <tr>
-                                            <th>
-                                                Bukti Pembayaran
-                                            </th>
-                                            <td>
-                                                <span class="ms-1"> :</span>
-                                            </td>
-                                            <td>
-                                                <span class="ms-3 mb-1"><a target="_blank"
-                                                        style="cursor: pointer; display: inline_block"
-                                                        href="https://s0.bukalapak.com/img/0657559704/large/Screenshot_2018_11_22_20_41_14_33.png"><img
+                                            <th>Bukti Pembayaran</th>
+                                            <td><span class="ms-1"> :</span></td>
+                                            <td><span class="ms-3 mb-1">
+                                                    <a id="imgBukti" target="_blank" style="cursor: pointer; " href="">
+                                                        <img
                                                             class="mb-1"
-                                                            src="https://s0.bukalapak.com/img/0657559704/large/Screenshot_2018_11_22_20_41_14_33.png"
-                                                            width="50px" /></a></span>
+                                                            src=""
+                                                            width="100"/></a></span>
                                             </td>
                                         </tr>
 
-                                        <tr>
-                                            <th>
-                                                Action
-                                            </th>
-                                            <td>
-                                                <span class="ms-1"> :</span>
-                                            </td>
-                                            <td>
-                                                <span class="ms-3"><a
-                                                        class="btn btn-primary btn-sm">Terima</a></span>
+                                        <tr id="btnKonfir">
+                                            <th>Konfirmasi</th>
+                                            <td><span class="ms-1"> :</span></td>
+                                            <td><span class="ms-3"><a
+                                                        class="btn btn-primary btn-sm" onclick="konfirmasiBayar(2)">Terima</a></span>
                                                 <span class="ms-1"><a
-                                                        class="btn btn-danger btn-sm">Tolak</a></span>
+                                                        class="btn btn-danger btn-sm" onclick="konfirmasiBayar(1)">Tolak</a></span>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>
-                                                Status Bayar
-                                            </th>
-                                            <td>
-                                                <span class="ms-1"> :</span>
-                                            </td>
-                                            <td>
-                                                <span class="ms-3">Menunggu Konfirmasi </span>
-                                            </td>
+                                            <th>Status Bayar</th>
+                                            <td><span class="ms-1"> :</span></td>
+                                            <td><span class="ms-3 field" id="dStatusBayar">Menunggu Konfirmasi </span></td>
                                         </tr>
 
-
                                         <tr>
-                                            <th>
-                                                Status Sewa
-                                            </th>
-                                            <td>
-                                                <span class="ms-1"> :</span>
-                                            </td>
-                                            <td>
-                                                <span class="ms-3">Sedang Di pakai </span>
-                                            </td>
+                                            <th>Status Sewa</th>
+                                            <td><span class="ms-1"> :</span></td>
+                                            <td><span class="ms-3 field" id="dStatus">Sedang Di pakai </span></td>
                                         </tr>
 
 
@@ -317,15 +204,8 @@
 
                             </div>
 
-
-                            <hr>
-
-                            @if ('status' == 'status')
-                                <a type="submit" class="btn btn-primary">Terima</button>
-                                    <a type="submit" class="ms-3 btn btn-danger">Tolak</a>
-                                @else
-                                    <a type="submit" class="btn btn-primary">Kembalikan</a>
-                            @endif
+                        </div>
+                        <div class="modal-footer" id="btnFooter">
 
                         </div>
 
@@ -334,59 +214,6 @@
             </div>
 
             <!-- Modal Tambah-->
-            <div class="modal fade" id="tambahsiswa" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tambah Data</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form>
-
-                                <div class="mb-3">
-                                    <label for="tanggal_pembelian" class="form-label">Tanggal Pembelian</label>
-                                    <input type="date" class="form-control " name="tanggal_pembelian"
-                                        id="tanggal_pembelian" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="alamat">Keterangan</label>
-                                    <textarea class="form-control" id="alamat" rows="3"></textarea>
-                                </div>
-
-
-                                <div class="mt-3 mb-2">
-                                    <label for="foto" class="form-label">Foto</label>
-                                    <input class="form-control" type="file" id="foto">
-                                </div>
-
-                                <hr>
-
-
-                                <div class="mb-3">
-                                    <label for="status" class="form-label">Status</label>
-                                    <div class="d-flex">
-                                        <select class="form-select" aria-label="Default select example" name="status">
-                                            <option selected>Pilih Status</option>
-                                            <option value="1">Belum Di Proses</option>
-                                            <option value="2">Dalam Proses Pembangunan</option>
-                                            <option value="3">Selesai</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="mb-4"></div>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
-                            </form>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
 
 
         </div>
@@ -397,18 +224,88 @@
 
 @section('script')
     <script>
-        $(document).ready(function() {
-
+        var idTrans;
+        $(document).ready(function () {
+            $('#selectStatus').val({{request('status')}})
         })
+
+        $(document).on('click', '#detailData', function () {
+            idTrans = $(this).data('id');
+            featchTransaksi()
+            $('#detail').modal('show')
+        })
+
+        function konfirmasiBayar(status) {
+            var data = {
+                status,
+                '_token': '{{csrf_token()}}'
+            };
+            var title = 'Menerima';
+            if (status === 1) {
+                title = 'Menolak'
+            }
+
+            saveDataObject(title + ' Bukti Pembayaran', data, window.location.pathname + '/' + idTrans + '/konfirmasi-bayar', featchTransaksi)
+            return false;
+        }
+
+        function featchTransaksi() {
+            fetch(window.location.pathname + '/' + idTrans)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    $('.field').empty();
+                    $('#dName').html(data['user']['nama'])
+                    $('#dhp').html(data['user']['pelanggan']['no_hp'])
+                    $('#dAlamat').html(data['user']['pelanggan']['alamat'])
+                    $('#dMobil').html(data['harga']['mobil']['nama'])
+                    $('#dTahun').html(data['harga']['mobil']['tahun'])
+                    $('#dKeterangan').html(data['harga']['mobil']['keterangan'])
+                    $('#dTanggal').html(data['tanggal_pinjam'])
+                    $('#dDurasi').html(data['harga']['duration'] + ' Jam')
+                    $('#dBiaya').html(data['harga']['harga'].toLocaleString())
+                    $('#btnKonfir').removeClass('d-none')
+                    $('#btnFooter').empty();
+                    if (data['status_pembayaran'] === 2) {
+                        $('#btnKonfir').addClass('d-none')
+                        if (data['status'] === 1) {
+                            $('#btnFooter').html('<a class="btn btn-success" onclick="sewa(2)">Diambil</a>')
+                        } else if (data['status'] === 2) {
+                            $('#btnFooter').html('<a class="btn btn-info" style="color: white" onclick="sewa(3)">Dikembalikan</a>')
+                        }
+                    }
+                    $('#dStatus').html(data['status'] === 0 ? 'Menunggu Konfirmasi' : (data['status'] === 1 ? 'Menunggu Pengambilan' : (data['status'] === 2 ? 'Dipinjam' : 'Selesai')))
+                    $('#dStatusBayar').html(data['status_pembayaran'] === 0 ? 'Menunggu' : (data['status_pembayaran'] === 1 ? 'Dotolak' : 'Diterima'))
+                    $('#imgBukti').attr('href', '#!')
+                    $('#imgBukti img').attr('src', '')
+                    if (data['image'] && data['image'] !== '') {
+                        $('#imgBukti').attr('href', data['image'])
+                        $('#imgBukti img').attr('src', data['image'])
+                    }
+                })
+        }
+
+        function sewa(status) {
+            var data = {
+                status,
+                '_token': '{{csrf_token()}}'
+            };
+            var title = 'Diambil';
+            if (status === 3) {
+                title = 'Dikembalikan'
+            }
+            saveDataObject('Mobil ' + title, data, window.location.pathname + '/' + idTrans + '/sewa', featchTransaksi);
+            return false;
+        }
 
         function hapus(id, name) {
             swal({
-                    title: "Menghapus data?",
-                    text: "Apa kamu yakin, ingin menghapus data ?!",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
+                title: "Menghapus data?",
+                text: "Apa kamu yakin, ingin menghapus data ?!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
                 .then((willDelete) => {
                     if (willDelete) {
                         swal("Berhasil Menghapus data!", {

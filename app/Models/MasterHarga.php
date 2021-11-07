@@ -14,4 +14,8 @@ class MasterHarga extends Model
         'duration',
         'harga',
     ];
+
+    public function mobil(){
+        return $this->belongsTo(MasterMobil::class,'mobil_id');
+    }
 }

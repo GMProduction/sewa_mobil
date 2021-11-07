@@ -12,8 +12,6 @@ class Transaksi extends Model
     protected $fillable = [
         'user_id',
         'harga_id',
-        'durasi',
-        'harga',
         'total',
         'tanggal_pinjam',
         'tanggal_kembali',
@@ -21,4 +19,27 @@ class Transaksi extends Model
         'status_pembayaran',
         'image',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function harga()
+    {
+        return $this->belongsTo(MasterHarga::class, 'harga_id');
+    }
+
+    public function scopeStatus($query, $filter)
+    {
+        $query->when(
+            $filter ?? false,
+            function ($query, $filter) {
+                if ($filter == '11'){
+                    return $query->where('status_pembayaran','=',$filter);
+                }
+                return $query->where('status', '=', $filter);
+            }
+        );
+    }
 }

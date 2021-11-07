@@ -139,41 +139,24 @@
                 </tr>
             </thead>
             <tbody>
-                {{-- @forelse($data as $key => $d)
-                    <tr>
-                        <td>{{ $key + 1 }}</td>
-                        <td>{{ $d->getPelanggan->nama }}</td>
-                        <td>{{ date('d F Y', strtotime($d->tanggal_pesanan)) }}</td>
-                        <td>
-                            <table style="border: none !important">
-                                @foreach ($d->getKeranjang as $num => $k)
-                                    <tr style="border: none">
-                                        <td rowspan="2" class="py-0">{{ $num + 1 }}</td>
-                                        <td colspan="5" class="py-0 border-bottom-0">{{ $k->getProduk->nama_produk }}
-                                        </td>
-                                    </tr>
-                                    <tr style="border-left: none; border-right: none">
-                                        <td class="py-0">{{ number_format($k->getProduk->harga, 0) }}</td>
-                                        <td class="py-0">x</td>
-                                        <td class="py-0">{{ $k->qty }}</td>
-                                        <td class="py-0">=</td>
-                                        <td class="py-0">{{ number_format($k->total_harga, 0) }}</td>
-                                    </tr>
-                                @endforeach
-                            </table>
-                        </td>
-                        <td>Rp. {{ number_format($d->biaya_pengiriman, 0) }}</td>
-                        <td>Rp. {{ number_format($d->total_harga, 0) }}</td>
-                    </tr>
-                @empty --}}
-                {{-- <tr>
-                        <td class="text-center" colspan="6">Tidak ada pesanan</td>
-                    </tr> --}}
-                {{-- @endforelse --}}
+            @forelse($data as $key => $d)
+                <tr>
+                    <td>{{1 + $key}}</td>
+                    <td>{{$d->user->nama}}</td>
+                    <td>{{$d->harga->mobil->nama}}</td>
+                    <td>{{date('d F Y H:i:s', strtotime($d->tanggal_pinjam))}}</td>
+                    <td>{{$d->harga->duration}} Jam</td>
+                    <td>Rp. {{number_format($d->harga->harga)}}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6" class="text-center">Tidak ada data</td>
+                </tr>
+            @endforelse
                 <tr>
                     <td colspan="4"></td>
                     <td>Grand Total</td>
-                    <td>Rp. {{ number_format(2000000, 0) }}</td>
+                    <td>Rp. {{ number_format($total) }}</td>
                 </tr>
             </tbody>
         </table>
@@ -186,9 +169,7 @@
 
         <div style="left:10px;width: 300px; margin-left : 100px;display: inline-block">
             <p class="text-center mb-5">Admin</p>
-            <p class="text-center">(
-                {{-- {{ auth()->user()->username }} --}}
-                )</p>
+            <p class="text-center">( ........................... )</p>
         </div>
 
 

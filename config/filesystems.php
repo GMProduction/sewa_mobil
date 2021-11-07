@@ -60,6 +60,27 @@ return [
             'visibility' => 'public',
         ],
 
+        'ktp' => [
+            'driver' => 'local',
+            'root' => public_path() . '/images/ktp',
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+        ],
+
+        'avatar' => [
+            'driver' => 'local',
+            'root' => public_path() . '/images/avatar',
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+        ],
+
+        'bukti' => [
+            'driver' => 'local',
+            'root' => public_path() . '/images/bukti',
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+        ],
+
     ],
 
     /*
