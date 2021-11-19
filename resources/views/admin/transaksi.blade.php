@@ -224,18 +224,27 @@
 
 @section('script')
     <script>
-        var idTrans;
+        var idTrans, setStatus;
         $(document).ready(function () {
             $('#selectStatus').val({{request('status')}})
         })
 
         $(document).on('click', '#detailData', function () {
             idTrans = $(this).data('id');
+            setStatus = null;
             featchTransaksi()
             $('#detail').modal('show')
         })
 
+        $('#detail').on('hidden.bs.modal', function () {
+            // do something…
+            if (setStatus){
+                window.location.reload();
+            }
+        })
+
         function konfirmasiBayar(status) {
+
             var data = {
                 status,
                 '_token': '{{csrf_token()}}'
@@ -246,6 +255,8 @@
             }
 
             saveDataObject(title + ' Bukti Pembayaran', data, window.location.pathname + '/' + idTrans + '/konfirmasi-bayar', featchTransaksi)
+            setStatus = 1;
+
             return false;
         }
 
@@ -295,6 +306,8 @@
                 title = 'Dikembalikan'
             }
             saveDataObject('Mobil ' + title, data, window.location.pathname + '/' + idTrans + '/sewa', featchTransaksi);
+            setStatus = 1;
+
             return false;
         }
 

@@ -19,6 +19,7 @@ class Transaksi extends Model
         'status_pembayaran',
         'image',
     ];
+    
 
     public function user()
     {

@@ -22,6 +22,7 @@ class AuthController extends Controller
                 'username' => 'required',
                 'nama'     => 'required',
                 'password' => 'required|confirmed',
+
             ]
         );
 
@@ -93,16 +94,18 @@ class AuthController extends Controller
         return false;
     }
 
-    public function loginWeb(){
+    public function loginWeb()
+    {
         $credentials = [
             'username' => \request('username'),
             'password' => \request('password'),
         ];
         if ($this->isAuth($credentials)) {
             $redirect = '/login';
-            if (Auth::user()->roles === 'admin'){
+            if (Auth::user()->roles === 'admin') {
                 return redirect('/');
             }
+
             return Redirect::back()->withErrors(['failed', 'Maaf anda bukan admin']);
         }
 
@@ -112,7 +115,8 @@ class AuthController extends Controller
     /**
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function logout(){
+    public function logout()
+    {
         Auth::logout();
 
         return redirect('/login');

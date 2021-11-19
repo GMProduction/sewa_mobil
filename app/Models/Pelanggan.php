@@ -18,4 +18,6 @@ class Pelanggan extends Model
         'user_id',
         'isActive'
     ];
+
+
 }
