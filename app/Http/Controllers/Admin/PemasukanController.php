@@ -33,7 +33,7 @@ class PemasukanController extends Controller
 
     public function dataTransaksi()
     {
-        $data = Transaksi::with(['user', 'harga.mobil']);
+        $data = Transaksi::with(['user', 'harga.mobil'])->where('status','=', 3);
         if (\request('start')) {
             $start = date('Y-m-d', strtotime(\request('start')));
             $end   = date('Y-m-d', strtotime(\request('end')));

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class LaporanController extends Controller
 {
-  
+
 
     public function cetakLaporanTransaksi()
     {
@@ -19,7 +19,7 @@ class LaporanController extends Controller
 
     public function dataTransaksi()
     {
-        
+
         $data   = [
             'data' => "data",
             'start' => "2012-01-01",
@@ -31,6 +31,7 @@ class LaporanController extends Controller
 
     public function cetakLaporanPemasukan()
     {
+        return $this->dataPemasukan();
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadHTML($this->dataPemasukan())->setPaper('f4', 'potrait');
 
@@ -39,7 +40,7 @@ class LaporanController extends Controller
 
     public function dataPemasukan()
     {
-        
+
         $data   = [
             'data' => "data",
             'start' => "2012-01-01",
