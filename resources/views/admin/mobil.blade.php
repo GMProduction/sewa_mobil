@@ -27,35 +27,40 @@
 
             <table class="table table-striped table-bordered ">
                 <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Foto</th>
-                    <th>Nama / Merk Mobil</th>
-                    <th>No. pol</th>
-                    <th>Tahun</th>
-                    <th>Keterangan</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Foto</th>
+                        <th>Nama / Merk Mobil</th>
+                        <th>No. pol</th>
+                        <th>Tahun</th>
+                        <th>Keterangan</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
                 </thead>
                 @forelse($data as $key => $d)
                     <tr>
-                        <td>{{$data->firstItem() + $key}}</td>
-                        <td><img src="{{$d->image}}" onerror="this.src='{{asset('/images/nouser.png')}}'; this.error=null"
-                                 style="height: 100px; object-fit: cover"/>
+                        <td>{{ $data->firstItem() + $key }}</td>
+                        <td><img src="{{ $d->image }}"
+                                onerror="this.src='{{ asset('/images/nouser.png') }}'; this.error=null"
+                                style="height: 100px; object-fit: cover" />
                         </td>
-                        <td>{{$d->nama}}</td>
-                        <td>{{$d->no_pol}}</td>
-                        <td>{{$d->tahun}}</td>
-                        <td>{{$d->keterangan}}</td>
-                        <td>{{$d->status == 1 ? 'Menunggu Diambil' : ($d->status == 2 ? 'Dipinjam' : 'Tersedia')}}</td>
+                        <td>{{ $d->nama }}</td>
+                        <td>{{ $d->no_pol }}</td>
+                        <td>{{ $d->tahun }}</td>
+                        <td>{{ $d->keterangan }}</td>
+                        <td>{{ $d->status == 1 ? 'Menunggu Diambil' : ($d->status == 2 ? 'Dipinjam' : 'Tersedia') }}</td>
                         <td style="width: 100px;">
                             <div style=" display: flex; flex-direction: column; justify-content: space-between">
-                                <button type="button" class="btn btn-success btn-sm" id="editData" data-image="{{$d->image}}" data-keterangan="{{$d->keterangan}}" data-tahun="{{$d->tahun}}"
-                                        data-nopol="{{$d->no_pol}}" data-nama="{{$d->nama}}" data-id="{{$d->id}}">Ubah
+                                <button type="button" class="btn btn-success btn-sm" id="editData"
+                                    data-image="{{ $d->image }}" data-keterangan="{{ $d->keterangan }}"
+                                    data-tahun="{{ $d->tahun }}" data-nopol="{{ $d->no_pol }}"
+                                    data-nama="{{ $d->nama }}" data-id="{{ $d->id }}">Ubah
                                 </button>
-                                <button type="button" class="btn btn-info btn-sm my-2" data-nama="{{$d->nama}}" data-id="{{$d->id}}" id="detailHarga" style="color: white">Harga</button>
-                                <button type="button" class="btn btn-danger btn-sm" onclick="hapus('{{$d->id}}', '{{$d->nama}}') ">hapus</button>
+                                <button type="button" class="btn btn-info btn-sm my-2" data-nama="{{ $d->nama }}"
+                                    data-id="{{ $d->id }}" id="detailHarga" style="color: white">Harga</button>
+                                <button type="button" class="btn btn-danger btn-sm"
+                                    onclick="hapus('{{ $d->id }}', '{{ $d->nama }}') ">hapus</button>
                             </div>
 
                         </td>
@@ -67,23 +72,21 @@
                 @endforelse
             </table>
             <div class="d-flex justify-content-end">
-                {{$data->links()}}
+                {{ $data->links() }}
             </div>
         </div>
 
 
         <div>
 
-
             <!-- Modal Tambah-->
-            <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
+            <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Form Master Mobil</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+                                aria-label="Close"></button>
                         </div>
                         <form id="form" onsubmit="return save()">
 
@@ -129,13 +132,14 @@
 
 
             <div class="modal fade" id="modalHarga" tabindex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
+                aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Form Harga Mobil <span id="titleHarga"></span></h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Form Harga Mobil <span id="titleHarga"></span>
+                            </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+                                aria-label="Close"></button>
                         </div>
 
                         <div class="modal-body">
@@ -144,31 +148,34 @@
                                 <input type="hidden" name="id" id="id">
                                 <div class="form-group mb-2">
                                     <label for="durasi">Durasi</label>
-                                  <select class="form-select" id="durasi" required name="duration" style="border-radius: 50px; ">
-                                      <option value="" selected disabled>Pilih Data</option>
-                                      <option value="6">6 Jam</option>
-                                      <option value="12">12 Jam</option>
-                                      <option value="24">24 Jam</option>
-                                  </select>
+                                    <select class="form-select" id="durasi" required name="duration"
+                                        style="border-radius: 50px; ">
+                                        <option value="" selected disabled>Pilih Data</option>
+                                        <option value="6">6 Jam</option>
+                                        <option value="12">12 Jam</option>
+                                        <option value="24">24 Jam</option>
+                                    </select>
                                 </div>
                                 <div class="form-group mb-2">
                                     <label for="harga">Harga</label>
-                                    <input type="number" class="form-control" required id="harga" name="harga" style="height: 38px">
+                                    <input type="number" class="form-control" required id="harga" name="harga"
+                                        style="height: 38px">
                                 </div>
                                 <div style="display: flex; justify-content: center">
                                     <button class="btn btn-success btn-sm me-2" type="submit">Simpan</button>
-                                    <a class="btn btn-info btn-sm" type="submit" style="color: white" onclick="clearField()">Clear</a>
+                                    <a class="btn btn-info btn-sm" type="submit" style="color: white"
+                                        onclick="clearField()">Clear</a>
                                 </div>
                             </form>
                             <hr>
                             <table class="table">
                                 <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Durasi / Jam</th>
-                                    <th>Harga</th>
-                                    <th style="width: 150px">Aksi</th>
-                                </tr>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Durasi / Jam</th>
+                                        <th>Harga</th>
+                                        <th style="width: 150px">Aksi</th>
+                                    </tr>
                                 </thead>
                                 <tbody id="tbHarha">
                                 </tbody>
@@ -185,13 +192,12 @@
 
 @section('script')
     <script>
-
         var idMobil;
-        $(document).ready(function () {
+        $(document).ready(function() {
 
         })
 
-        $(document).on('click', '#detailHarga', function () {
+        $(document).on('click', '#detailHarga', function() {
             idMobil = $(this).data('id')
             getHarga(idMobil)
             $('#modalHarga #titleHarga').html($(this).data('nama'))
@@ -203,7 +209,7 @@
             if ($('#formHarga #id').val()) {
                 title = 'Edit Harga';
             }
-            saveData(title, 'formHarga', window.location.pathname+'/harga/'+idMobil, afterharga)
+            saveData(title, 'formHarga', window.location.pathname + '/harga/' + idMobil, afterharga)
             return false;
         }
 
@@ -218,38 +224,42 @@
             $('#formHarga #harga').val('')
         }
 
-        function getHarga(id){
-            fetch(window.location.pathname+'/harga/'+id)
-            .then(response => response.json())
-            .then(data => {
-                var tabel = $('#tbHarha');
-                tabel.empty();
-                console.log(data)
-                if (data['harga'].length > 0){
-                    $.each(data['harga'], function (k, v) {
+        function getHarga(id) {
+            fetch(window.location.pathname + '/harga/' + id)
+                .then(response => response.json())
+                .then(data => {
+                    var tabel = $('#tbHarha');
+                    tabel.empty();
+                    console.log(data)
+                    if (data['harga'].length > 0) {
+                        $.each(data['harga'], function(k, v) {
+                            tabel.append('<tr>' +
+                                '<td>' + parseInt(k + 1) + '</td>' +
+                                '<td>' + v['duration'] + ' Jam</td>' +
+                                '<td class="text-end">' + v['harga'].toLocaleString() + '</td>' +
+                                '<td><a class="btn btn-sm btn-success me-2" id="editHarga" data-harga="' +
+                                v['harga'] + '" data-duration="' + v['duration'] + '" data-id="' + v['id'] +
+                                '">edit</a>' +
+                                '<a class="btn btn-sm btn-danger" id="deleteHarga" data-id="' + v['id'] +
+                                '" onclick="deleteHarga(' + v['id'] + ', ' + v['duration'] + ', ' + v[
+                                    'harga'] + ')">hapus</a></td>' +
+                                '</tr>')
+                        })
+                    } else {
                         tabel.append('<tr>' +
-                            '<td>'+parseInt(k+1)+'</td>' +
-                            '<td>'+v['duration']+' Jam</td>' +
-                            '<td class="text-end">'+v['harga'].toLocaleString()+'</td>' +
-                            '<td><a class="btn btn-sm btn-success me-2" id="editHarga" data-harga="'+v['harga']+'" data-duration="'+v['duration']+'" data-id="'+v['id']+'">edit</a>' +
-                            '<a class="btn btn-sm btn-danger" id="deleteHarga" data-id="'+v['id']+'" onclick="deleteHarga('+v['id']+', '+v['duration']+', '+v['harga']+')">hapus</a></td>' +
+                            '<td colspan="5" class="text-center">Tidak ada data</td>' +
                             '</tr>')
-                    })
-                }else {
-                    tabel.append('<tr>' +
-                        '<td colspan="5" class="text-center">Tidak ada data</td>' +
-                        '</tr>')
-                }
-            })
+                    }
+                })
         }
 
-        $(document).on('click', '#editHarga', function () {
+        $(document).on('click', '#editHarga', function() {
             $('#formHarga #id').val($(this).data('id'))
             $('#formHarga #durasi').val($(this).data('duration'))
             $('#formHarga #harga').val($(this).data('harga'))
         })
 
-        $(document).on('click', '#addData, #editData', function () {
+        $(document).on('click', '#addData, #editData', function() {
             $('#modal #id').val($(this).data('id'))
             $('#modal #nama').val($(this).data('nama'))
             $('#modal #nopol').val($(this).data('nopol'))
@@ -271,13 +281,14 @@
             return false
         }
 
-        function deleteHarga(id,jam, harga) {
-            deleteData(jam+' jam dengan harga Rp. '+harga.toLocaleString(), window.location.pathname+'/harga/'+idMobil+'/delete?idh='+id, afterharga)
+        function deleteHarga(id, jam, harga) {
+            deleteData(jam + ' jam dengan harga Rp. ' + harga.toLocaleString(), window.location.pathname + '/harga/' +
+                idMobil + '/delete?idh=' + id, afterharga)
             return false;
         }
 
         function hapus(id, name) {
-            deleteData(name, window.location.pathname+'/'+id+'/delete')
+            deleteData(name, window.location.pathname + '/' + id + '/delete')
             return false;
         }
     </script>

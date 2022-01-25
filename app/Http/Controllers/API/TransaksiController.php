@@ -40,8 +40,11 @@ class TransaksiController extends CustomController
             'status' => 0,
             'status_pembayaran' => 0,
         ];
-        Transaksi::create($field);
-        return response()->json('berhasil');
+        $trans = Transaksi::create($field);
+        return response()->json([
+            "id" => $trans->id,
+            "msg" => "berhasil"
+        ]);
     }
 
     public function show($id){
